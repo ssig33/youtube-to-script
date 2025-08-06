@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'youtube_to_script'
+
+if ARGV.length != 3
+  puts "Usage: #{$0} <video_file> <vtt_file> <output_markdown>"
+  puts "Example: #{$0} video.mp4 subtitles.vtt output.md"
+  exit 1
+end
+
+video_path = ARGV[0]
+vtt_path = ARGV[1]
+output_path = ARGV[2]
+
+pipeline = YoutubeToScript::Pipeline.new(video_path, vtt_path, output_path)
+pipeline.run
