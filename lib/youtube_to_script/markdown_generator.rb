@@ -52,7 +52,7 @@ module YoutubeToScript
       request['Content-Type'] = 'application/json'
       
       request.body = {
-        model: "gpt-4.1",
+        model: "gpt-4.1-mini",
         messages: [
           {
             role: "system",
