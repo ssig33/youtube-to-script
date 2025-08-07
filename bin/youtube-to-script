@@ -18,6 +18,7 @@ delete_mode = false
 
 if video_path =~ /https/
   delete_mode = true
+  output_path = vtt_path
   puts "Downloading video from URL: #{video_path}"
 
   pwd = Dir.pwd
