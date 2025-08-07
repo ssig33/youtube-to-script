@@ -24,7 +24,7 @@ if video_path =~ /https/
   pwd = Dir.pwd
 
   FileUtils.cd Dir.mktmpdir do
-    %w[en ja].each do |lang|
+    %w[en ja es].each do |lang|
       break if system 'yt-dlp', '--write-auto-sub', '--sub-lang', lang, video_path
     end
 
