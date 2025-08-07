@@ -5,7 +5,7 @@ YouTube動画とWebVTT字幕から、AIを活用して日本語の要約Markdown
 ## 機能
 
 - WebVTT字幕の解析
-- OpenAI API (gpt-4.1モデル) を使った重要トピックの抽出
+- OpenAI API (gpt-5モデル) を使った重要トピックの抽出
 - ffmpegで動画の各トピック時点のスクリーンショット取得
 - Gyazoへの画像アップロード
 - スクリーンショット付きMarkdownドキュメントの生成
