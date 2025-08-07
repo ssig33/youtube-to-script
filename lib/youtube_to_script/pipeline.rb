@@ -1,3 +1,5 @@
+
+
 module YoutubeToScript
   class Pipeline
     def initialize(video_path, vtt_path, output_path)

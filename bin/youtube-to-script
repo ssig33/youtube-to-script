@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'youtube_to_script'
-
-if ARGV.length != 3
-  puts "Usage: #{$0} <video_file> <vtt_file> <output_markdown>"
-  puts "Example: #{$0} video.mp4 subtitles.vtt output.md"
+require 'tmpdir'
+require 'fileutils'
+if ARGV.length < 2
+  puts "Usage: #{$PROGRAM_NAME} <video_file> <vtt_file> <output_markdown>"
+  puts "Example: #{$PROGRAM_NAME} video.mp4 subtitles.vtt output.md"
   exit 1
 end
 
@@ -12,5 +14,43 @@ video_path = ARGV[0]
 vtt_path = ARGV[1]
 output_path = ARGV[2]
 
+delete_mode = false
+
+if video_path =~ /https/
+  delete_mode = true
+  puts "Downloading video from URL: #{video_path}"
+
+  pwd = Dir.pwd
+
+  FileUtils.cd Dir.mktmpdir do
+    %w[en ja].each do |lang|
+      break if system 'yt-dlp', '--write-auto-sub', '--sub-lang', lang, video_path
+    end
+
+    vtt = Dir.glob('*.vtt').first
+    video = [Dir.glob('*.mp4'), Dir.glob('*.webm')].flatten.first
+
+    if vtt.nil? || video.nil?
+      puts 'Error: 字幕ファイルまたは動画ファイルが見つかりません'
+      exit 1
+    end
+
+    FileUtils.mv vtt, pwd
+    FileUtils.mv video, pwd
+
+    video_path = video
+    vtt_path = vtt
+  end
+end
+
 pipeline = YoutubeToScript::Pipeline.new(video_path, vtt_path, output_path)
 pipeline.run
+
+if delete_mode
+  puts "Deleting temporary files: #{video_path}, #{vtt_path}"
+  FileUtils.rm_f(video_path)
+  FileUtils.rm_f(vtt_path)
+end
+
+puts "Output written to: #{output_path}"
+
